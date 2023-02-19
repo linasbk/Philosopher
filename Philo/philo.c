@@ -6,7 +6,7 @@
 /*   By: lsabik <lsabik@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/19 20:12:51 by lsabik            #+#    #+#             */
-/*   Updated: 2023/02/19 20:20:07 by lsabik           ###   ########.fr       */
+/*   Updated: 2023/02/19 22:52:33 by lsabik           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,19 @@
 
 int	main(int ac, char **av)
 {
-	t_data	*data;
+	t_philosopher	*philo;
 
-	data = (t_data *)malloc(sizeof(t_data));
-	if (ac != 5 && ac != 6)
-		return (print_error("Wrong arguments!"));
-	if (init(data, av) == SUCCESS)
-		printf("good!\n");
-	return (SUCCESS);
+	philo = (t_philosopher *)malloc(sizeof(t_philosopher));
+	if (philo)
+	{
+		if (ac != 5 && ac != 6)
+			return (print_error("Wrong arguments!"));
+		while(1)
+		{
+			if (!init(philo, av))
+				break;
+		}
+		// return (SUCCESS);
+	}
+	return (FAILURE);
 }

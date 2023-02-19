@@ -6,7 +6,7 @@
 /*   By: lsabik <lsabik@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/15 15:05:41 by lsabik            #+#    #+#             */
-/*   Updated: 2023/02/19 20:21:30 by lsabik           ###   ########.fr       */
+/*   Updated: 2023/02/19 22:20:40 by lsabik           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,27 +26,27 @@
 # define SUCCESS 1
 # define FAILURE 0
 
-typedef struct s_philosopher
-{
-	int	fork_id;
-	int	left_fork;
-	int	right_fork;
-	int	t_last_meal;
-}				t_philosopher;
-
 typedef struct s_data
 {
-	int				nb_of_philosopher;
-	int				time_to_die;
-	int				time_to_eat;
-	int				time_to_sleep;
-	int				times_to_eat;
-	pthread_t		thread;
-	pthread_mutex_t	*forks;
-	t_philosopher	*philo;
+	int	nb_of_philosopher;
+	int	time_to_die;
+	int	time_to_eat;
+	int	time_to_sleep;
+	int	times_to_eat;
 }				t_data;
 
-int		init(t_data *data, char **av);
+typedef struct s_philosopher
+{
+	int				fork_id;
+	int				left_fork;
+	int				right_fork;
+	int				t_last_meal;
+	pthread_t		thread;
+	pthread_mutex_t	*forks;
+	t_data	*data;
+}				t_philosopher;
+
+int		init(t_philosopher *philo, char **av);
 void	*philo_action(void *argv);
 int		print_error(char *str);
 long	get_time(void);

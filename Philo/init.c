@@ -6,34 +6,56 @@
 /*   By: lsabik <lsabik@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/19 20:12:36 by lsabik            #+#    #+#             */
-/*   Updated: 2023/02/19 20:16:51 by lsabik           ###   ########.fr       */
+/*   Updated: 2023/02/19 22:55:44 by lsabik           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include"philo.h"
 
-int	init_mutex(t_data *data)
+int	init_mutex(t_philosopher *philo)
 {
 	int	i;
 
 	i = -1;
-	while (++i < data->nb_of_philosopher)
-		if (pthread_mutex_init(&(data->forks[i]), NULL) != 0)
-			return (FAILURE);
-	return (SUCCESS);
+	philo->forks = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t));
+	if (philo->forks)
+	{
+		while (++i < philo->data->nb_of_philosopher)
+		{
+			if (pthread_mutex_init(&(philo->forks[i]), NULL) != 0)
+			{	
+				// free(philo->forks);
+            	return FAILURE;
+			}
+			i++;
+		}
+		return (SUCCESS);
+	}
+	return (FAILURE);
 }
 
-void	init_philosophers(t_data *data)
+int	init_philosophers(t_philosopher *philo)
 {
 	int	i;
 
 	i = -1;
-	while (++i < data->nb_of_philosopher)
+	while (++i < philo->data->nb_of_philosopher)
 	{
-		data->philo->fork_id = i;
-		pthread_create(&(data->thread), NULL, philo_action, data);
-		data->philo->t_last_meal = get_time();
+		philo[i].fork_id = i;
+		philo[i].left_fork = i;
+		philo[i].right_fork = (i + 1) % philo->data->nb_of_philosopher;
+		philo[i].t_last_meal = get_time();
+		while (philo[i].t_last_meal < get_time())
+			pthread_create(&(philo[i].thread), NULL, philo_action, &philo[i]);
+		i++;
 	}
+	i = 0;
+    while (i < philo->data->nb_of_philosopher)
+    {
+        pthread_join(philo[i].thread, NULL);
+        i++;
+    }
+	return (SUCCESS);
 }
 
 int	init_args(t_data *data, char **av)
@@ -56,12 +78,16 @@ int	init_args(t_data *data, char **av)
 	return (SUCCESS);
 }
 
-int	init(t_data *data, char **av)
+int	init(t_philosopher *philo, char **av)
 {
-	if (!init_args(data, av))
+	philo->data = (t_data *)malloc(sizeof(t_data));
+	if (!philo->data)
+		return (FAILURE);
+	if (!init_args(philo->data, av))
 		return (print_error("Arguments are not valid!!"));
-	if (init_mutex(data) == FAILURE)
+	if (init_mutex(philo) == FAILURE)
 		return (print_error("Error in initializing mutex!!"));
-	init_philosophers(data);
+		if (!init_philosophers(philo))
+			return (FAILURE);
 	return (SUCCESS);
 }
