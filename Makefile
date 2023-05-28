@@ -2,7 +2,7 @@ NAME        := philo
 CC        := cc
 FLAGS    := -Wall -Wextra -Werror
 HEADERS    := philo.h
-SRCS        := init.c philo_action.c philo.c print_error.c philo_utils.c
+SRCS        := init.c philo_action.c philo.c ft_print.c philo_utils.c philo_utilis2.c
                           
 OBJS        := $(SRCS:.c=.o)
 
@@ -12,7 +12,7 @@ OBJS        := $(SRCS:.c=.o)
 
 CLR_RMV		:= \033[0m
 RED		    := \033[1;31m
-GREEN		:= \033[1;32m
+GREEN		:= \033[1;32m 
 YELLOW		:= \033[1;33m
 BLUE		:= \033[1;34m
 CYAN 		:= \033[1;36m
