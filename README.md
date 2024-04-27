@@ -10,6 +10,8 @@
 	<img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/linasbk/get_next_line?color=green" />
 </p>
 ---
+
+
 ## General idea
 
 The mandatory part of this project asks us to solve the dining philosophers problem and implement a mutithreading solution. In order to better understand the solution that we are going to implement in this project I suggest you to read something about what a thread is and how multithreading works, I'll leave a couple of wikipedia references to start learning about these topics:
@@ -30,9 +32,13 @@ But, how are we going to do that? Using mutex!
 
 ## Race Conditions & Mutex
 Race conditions
+
+
 Before explaining what mutex are and why we have to use them, let's talk about what race conditions are. A Race condition it is a condition in which one or more threads are trying to access and modify a same variable at the same time, this can lead to an error in the final value of that variable. To better understan the race condition here's an example: Let's say that we want to count to 2.000.000, to do that with the multithreading we simply make two threads that execute the same routine, and the routine increase the variable cont to 1.000.000, in this way we should execute the while inside routine 2 times and when cont is printed we should get 2.000.000. Well, that's not exactly how it works. 
 
 Mutex
+
+
 Now that we know what a race condition is we'll talk about mutex, that are what we need to avoid a data racing. Immagine these as locks, if a mutex is already locked and a thread tries to lock it he we'll be stopped untill the mutex will be unlocked. Taking up the previous example, we could avoid the race condition simply adding a lock before we increase the value, in this way thread B can't overwrite the value of cont with what he read before being stopped. 
 
 ## Issues related to thedining philosophers problem.
